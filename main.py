@@ -137,36 +137,84 @@ class Student:
         return self.get_average_grade() < other.get_average_grade()
 
 
+def get_average_student_hw_grade(students, course):
+    """
+    Подсчитывает среднюю оценку за домашние задания по всем студентам на указанном курсе
+    """
+    total_grades = []
+
+    for student in students:
+        if course in student.grades:
+            total_grades.extend(student.grades[course])
+    return sum(total_grades) / len(total_grades) if total_grades else 0
+
+
+def get_average_lecturer_grade(lecturers, course):
+    """
+    Подсчитывает среднюю оценку за лекции по всем лекторам на указанном курсе
+    """
+    total_grades = []
+
+    for lecturer in lecturers:
+        if course in lecturer.grades:
+            total_grades.extend(lecturer.grades[course])
+    return sum(total_grades) / len(total_grades) if total_grades else 0
+
+
 lecturer1 = Lecturer('Иван', 'Иванов')
 lecturer2 = Lecturer('Круглов', 'Вячеслав')
+lecturer3 = Lecturer('Пятницкий', 'Олег')
 
 reviewer1 = Reviewer('Круглова', 'Мария')
 reviewer2 = Reviewer('Самойлов', 'Роман')
 
 student1 = Student('Алёхина', 'Ольга', 'Ж')
 student2 = Student('Петров', 'Григорий', 'М')
+student3 = Student('Немов', 'Сава', 'М')
 
 student1.courses_in_progress = ['Python', 'Git']
 student1.finished_courses = ['Введение в программирование']
 student2.courses_in_progress = ['C++', 'Java']
 student2.finished_courses = ['Введение в программирование']
+student3.courses_in_progress = ['Python', 'Java']
+student3.finished_courses = ['Введение в программирование']
 
 reviewer1.courses_attached = ['Python', 'Git']
 reviewer2.courses_attached = ['C++', 'Java']
 
 lecturer1.courses_attached = ['Python', 'Git']
 lecturer2.courses_attached = ['C++', 'Java']
+lecturer3.courses_attached = ['Python', 'Java', 'C++']
 
 student1.rate_lecture(lecturer1, 'Python', 9 )
 student1.rate_lecture(lecturer1, 'Git', 7 )
+student1.rate_lecture(lecturer3, 'Python', 5 )
+
 student2.rate_lecture(lecturer2, 'C++', 8 )
 student2.rate_lecture(lecturer2, 'Java', 7 )
+student2.rate_lecture(lecturer3, 'Java', 5 )
+student2.rate_lecture(lecturer3, 'C++', 7 )
+
+student3.rate_lecture(lecturer1, 'Python', 8 )
+student3.rate_lecture(lecturer2, 'Java', 7 )
+student3.rate_lecture(lecturer3, 'Java', 5 )
 
 reviewer1.rate_hw(student1, 'Python', 10)
 reviewer1.rate_hw(student1, 'Git', 9)
+
 reviewer2.rate_hw(student2, 'C++', 8)
 reviewer2.rate_hw(student2, 'Java', 9)
 
+reviewer1.rate_hw(student3, 'Python', 8)
+reviewer2.rate_hw(student3, 'Java', 9)
+
+students_list = [student1, student2, student3]
+lecturers_list = [lecturer1, lecturer2, lecturer3]
+
+course_name = 'Python'
+
+average_hw = get_average_student_hw_grade(students_list, course_name)
+average_lect = get_average_lecturer_grade(lecturers_list, course_name)
 
 print(lecturer1, '\n')
 print(lecturer2, '\n')
@@ -175,7 +223,7 @@ print(student2, '\n')
 print(reviewer1, '\n')
 print(reviewer2, '\n')
 
-print(f"Средняя оценка студента Алехиной О. больше чем Петрова Г. : {student1 > student2}")
-print(f"Средняя оценка лектора Иванова И. равна оценке Круглова В. : {lecturer1 == lecturer2}")
+print(f"Средняя оценка студентов по курсу {course_name}: {average_hw:.1f}")
+print(f"Средняя оценка лекторов по курсу {course_name}: {average_lect:.1f}")
 
 
